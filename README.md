@@ -4,7 +4,7 @@ This project features a server 🗂️ made using Express and a User Interface �
 
 The server works as an API that allows the user to **_view_**, **_add_**, **_edit_** and **_delete_** products in a fake store admin pannel. 🛅
 
-In the routes that require an id to the passed, the product router uses a custom middleware to check if the value provided as the id is valid. ✔️
+In the routes that require an id to be passed, the product router uses a custom middleware to check if the value provided as the id is valid. If it is, it passes the execution to the next handler, otherwise it sends the error response ✔️
 
 ## `API Reference 📑` 
 
