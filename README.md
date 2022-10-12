@@ -4,6 +4,8 @@ This project features a server 🗂️ made using Express and a User Interface �
 
 The server works as an API that allows the user to **_view_**, **_add_**, **_edit_** and **_delete_** products in a fake store admin pannel. 🛅
 
+In the routes that require an id to the passed, the product router uses a custom middleware to check if the value provided as the id is valid. ✔️
+
 ## `API Reference 📑` 
 
 **GET** `/api/products` returns all the products of the store
@@ -32,6 +34,6 @@ The server works as an API that allows the user to **_view_**, **_add_**, **_edi
 
 <hr>
 
-**DELETE** `/api/products/:id` Deletes a product from the store.
+**DELETE** `/api/products/id` Deletes a product from the store.
 
 PS: The project is not connected to a database, so when the server re-starts all the data come back to the initial stage, which relies on the `resource/products.json`.
