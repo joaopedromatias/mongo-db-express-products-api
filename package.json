@@ -4,8 +4,13 @@
   "description": "Project designed to manage data from UI by communcating to server",
   "main": "app.ts",
   "scripts": {
+    "start": "nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "joaopedromatias",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1"
+  }
 }
