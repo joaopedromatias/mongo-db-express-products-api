@@ -45,8 +45,26 @@ export const createProduct = (req: Request, res: Response) => {
 
 export const updateProduct = (req: Request, res: Response) => { 
     const { id } = req.params;
+    const { name, price, image_url } = req.body;
 
-    const product = programData.find(product => product.id === Number(id));
+    let product: Product | undefined = programData.find(product => product.id === Number(id));
+
+    if( name || price || image_url) { 
+        if (product) { 
+
+            product.name = name || product.name
+            product.price = price || product.price
+            product.image_url = image_url || product.image_url
+
+            programData[Number(id)-1] = product;
+
+            res.status(200).json({sucess: true, message: 'product sucessfully updated'});
+        } else { 
+            res.status(404).send({sucess: false, message: 'no product matching the provided id'})
+        }
+    } else { 
+        res.status(400).send({sucess: false, message: 'you need to provide at least a new property (name, price or image_url'})
+    }
     
 };
 
