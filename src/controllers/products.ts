@@ -39,7 +39,7 @@ export const getProduct = (req: Request, res: Response) => {
 };
 
 export const createProduct = (req: Request, res: Response) => { 
-    const { name, price, image } = req.body
+    const { name, price, image_url } = req.body
     if (!name || !price) { 
         res.status(400).json({sucess: false, message: 'You need to provide a name and a price to the new product'})
     } else {
@@ -48,7 +48,7 @@ export const createProduct = (req: Request, res: Response) => {
                 id: programData.length + 1,
                 name,
                 price,
-                image
+                image_url
             })
             res.status(201).send({sucess: true, message: 'product sucessfully registered'})
         } catch (err) { 

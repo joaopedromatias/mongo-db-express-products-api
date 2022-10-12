@@ -1,5 +1,5 @@
 {
-  "name": "express-server-js-operations",
+  "name": "express-server-products",
   "version": "1.0.0",
   "description": "Project designed to manage data from UI by communcating to server, using React and Express",
   "main": "app.ts",
