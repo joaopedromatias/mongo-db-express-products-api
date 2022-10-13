@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 export const checkIsNumber = (req: Request, res: Response, next: NextFunction): void => { 
 
-    const { id } = req.params
+    const { id } = req.params;
 
     const castNumberId = Number(id);
     
