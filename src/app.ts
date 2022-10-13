@@ -1,10 +1,15 @@
 import express from 'express'
 import productsRouter from './routes/products'
+import cors from 'cors'
 
 const app = express();
-const port = 2000;
+const port = 8080;
 
 app.use(express.static('./frontend/public'));
+
+app.use(cors({ 
+    origin: '*'
+}))
 
 app.use(express.urlencoded({extended: false}));
 

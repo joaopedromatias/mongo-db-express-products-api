@@ -6,21 +6,21 @@ declare global {
         image_url?: string
     }
     
-    interface APIResponses { 
+    interface APIResponse { 
         sucess: boolean
-        message: string
+        message?: string
         data?: Product[] | Product
     }
 
-    type ProductData = Product[] | Product | null
+    interface StateData { 
+        products: null | Product[]
+        isDataFetched: boolean
+    }
 
     interface ReducerActionFunction { 
         type: string,
-        payload: { 
-            data: Product | Product[]
-        }
+        payload: Product[]
     }
-
 }
 
 export {}
