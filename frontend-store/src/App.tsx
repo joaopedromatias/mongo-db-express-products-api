@@ -1,32 +1,11 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import './App.css';
+import { ReducerProvider } from "./components/ReducerProvider";
+import { Store } from "./components/store/Store";
 
 const App = () => {
-
-  // const [data, setData] = useState<Products[] | null>(null)
-
-  useEffect(() => { 
-    
-  }, [])
-
-  return (
-    <Wrapper>
-      <div className='grid'>
-
-      </div>
-    </Wrapper>
-  );
+  return <ReducerProvider>
+      <Store/>
+    </ReducerProvider>
 }
 
-const Wrapper = styled.div`
-margin: 0;
-font-size: 16px;
-.grid { 
-  display: grid;
-  /*grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1fr, 300px);*/
-}
-`
 
 export default App;
