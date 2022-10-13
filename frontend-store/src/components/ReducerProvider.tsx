@@ -1,5 +1,5 @@
 import { createContext, useReducer, ReactNode, FC } from 'react'
-import { reducer } from '../reducer'
+import { reducer } from '../reducer/reducer'
 
 const initialState: StateData = { 
     products: null,

@@ -1,46 +1,59 @@
 import { useContext } from "react"
+import { useFetchProducts } from "../../hooks/useFetch";
 import { ReducerContext } from "../ReducerProvider"
 import { ProductCard } from "./ProductCard";
+import styled from "styled-components";
+import { AddProduct } from "./AddProduct";
 
 const apiHostname = 'http://localhost';
 const port = 8080;
-const path = '/api/products';
+const getProductsRoute = '/api/products';
 
 export const Store = (): JSX.Element => { 
     
-    const { productData, dispatch } = useContext(ReducerContext);
+    const { productData: { products} } = useContext(ReducerContext);
     
-    const fetchData = async (host: string, port: number, path: string) => { 
+    useFetchProducts(apiHostname, port, getProductsRoute);
 
-        const res = await fetch(`${host}:${port}${path}`);
-        const rawData: APIResponse = await res.json();
-        
-        const { data } = rawData;
+    if(products) { 
 
-        if (Array.isArray(data)) { 
-            dispatch({
-                type: 'FETCHED_PRODUCTS',
-                payload: data
-            });
-        }
-        
+        return <StoreWrapper>
+            <div className="header">
+                <span className="title">Store Admin Pannel</span>
+            </div>
+            <div className="products-grid">
+                {products.map(product => { 
+                    return <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        name={product.name}
+                        price={product.price}
+                        image_url={product.image_url} />
+                })}
+                <AddProduct />
+            </div>
+        </StoreWrapper>
     }
 
-    productData.isDataFetched ? <></> : fetchData(apiHostname, port, path);    
-
-    if(Array.isArray(productData.products)) { 
-
-        return <div>
-            {productData.products.map(product => { 
-                return <ProductCard 
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                image_url={product.image_url} />
-            })}
-        </div>
-    }
-
-    return <div>Error</div>
+    return <h3>Error</h3>
 }
+
+const StoreWrapper = styled.div`
+.header {
+    height: 80px;
+    background: var(--header-bg-color);
+    .title { 
+        display: inline-block;
+        margin: 15px 0px;
+        padding-top: 10px;
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+}
+.products-grid { 
+    margin: 50px 180px;
+    display: grid;
+    gap: 100px;
+    grid-template-columns: auto auto auto;
+}
+`
