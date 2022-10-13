@@ -1,10 +1,12 @@
-# `Express Server Products Operations 🔧`
+# `Express Server Products CRUD Operations 🔧`
 
 This project features a server 🗂️ made using Express and a User Interface 💻 made using React.
 
-The server works as an API that allows the user to **_view_**, **_add_**, **_edit_** and **_delete_** products in a fake store admin pannel. 🛅
+The server works as a web server and as an API that allows the user to **_view_**, **_add_**, **_edit_** and **_delete_** products in a fake store admin pannel. 🛅
 
-In the routes that require an id to be passed, the product router uses a custom middleware to check if the value provided as the id is valid. If it is, it passes the execution to the next handler, otherwise it sends the error response ✔️
+In the routes that require an id to be passed, the product router uses a `custom middleware` to check if the value provided as the id is valid. If it is, it passes the execution to the next handler, otherwise it sends the error response ✔️
+
+There are other two `custom middlewares` in order to validate if the request body meets the expectation (on POST and UPDATE routes).
 
 ## `API Reference 📑` 
 
