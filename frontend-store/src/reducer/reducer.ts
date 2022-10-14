@@ -5,7 +5,8 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
     if (type === 'FETCHED_PRODUCTS') {
         return { 
             products: payload, 
-            isDataFetched: true 
+            isDataFetched: true,
+            isDataOld: false
         }
     }
 

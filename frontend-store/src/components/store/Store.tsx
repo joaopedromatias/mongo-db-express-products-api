@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { useFetchProducts } from "../../hooks/useFetch";
+import { useFetchProducts } from "../../hooks/useFetchProducts";
 import { ReducerContext } from "../ReducerProvider"
 import { ProductCard } from "./ProductCard";
 import styled from "styled-components";
@@ -51,9 +51,10 @@ const StoreWrapper = styled.div`
     }
 }
 .products-grid { 
-    margin: 50px 180px;
+    margin: 50px 100px;
     display: grid;
-    gap: 100px;
+    column-gap: 80px;
+    row-gap: 50px;
     grid-template-columns: auto auto auto;
 }
 `

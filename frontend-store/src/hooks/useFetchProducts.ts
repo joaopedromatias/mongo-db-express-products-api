@@ -5,7 +5,7 @@ export const useFetchProducts = async (host: string, port: number, path: string)
 
     const { productData, dispatch} = useContext(ReducerContext);
 
-    if (!productData.isDataFetched) { 
+    if (!productData.isDataFetched || productData.isDataOld) { 
 
         const res = await fetch(`${host}:${port}${path}`);
         const rawData: APIResponse = await res.json();

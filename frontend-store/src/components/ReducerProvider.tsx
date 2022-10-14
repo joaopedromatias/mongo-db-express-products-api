@@ -3,7 +3,8 @@ import { reducer } from '../reducer/reducer'
 
 const initialState: StateData = { 
     products: null,
-    isDataFetched: false
+    isDataFetched: false,
+    isDataOld: false
 }
 
 interface Props { 

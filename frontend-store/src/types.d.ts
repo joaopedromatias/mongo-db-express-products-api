@@ -15,6 +15,7 @@ declare global {
     interface StateData { 
         products: null | Product[]
         isDataFetched: boolean
+        isDataOld: boolean
     }
 
     interface ReducerActionFunction { 
