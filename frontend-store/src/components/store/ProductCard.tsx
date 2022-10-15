@@ -33,7 +33,7 @@ export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JS
             <EditIcon onclick={handleEdit}/>
             <DeleteIcon onclick={handleDelete}/>
         </div>
-        {isModalOpen ? <Modal type={modalType} setIsModalOpen={setIsModalOpen} productName={name}/> : <></>}
+        {isModalOpen ? <Modal type={modalType} setIsModalOpen={setIsModalOpen} productName={name} productId={id}/> : <></>}
     </Wrapper>
 }
 
