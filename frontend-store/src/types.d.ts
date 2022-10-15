@@ -12,6 +12,11 @@ declare global {
         data?: Product[] | Product
     }
 
+    interface ReducerActionFuntionPayload { 
+        data?: Product[],
+        productId?: number
+    }
+
     interface StateData { 
         products: null | Product[]
         isDataFetched: boolean
@@ -20,7 +25,7 @@ declare global {
 
     interface ReducerActionFunction { 
         type: string,
-        payload: Product[]
+        payload: ReducerActionFuntionPayload 
     }
 }
 

@@ -13,6 +13,7 @@ export const Store = (): JSX.Element => {
     
     const { productData: { products} } = useContext(ReducerContext);
     
+
     useFetchProducts(apiHostname, port, getProductsRoute);
 
     if(products) { 
@@ -40,8 +41,13 @@ export const Store = (): JSX.Element => {
 
 const StoreWrapper = styled.div`
 .header {
+    position: sticky;
+    top: 0;
     height: 80px;
+    width: 100vw;
     background: var(--header-bg-color);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     .title { 
         display: inline-block;
         margin: 15px 0px;

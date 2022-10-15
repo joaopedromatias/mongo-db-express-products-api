@@ -15,7 +15,9 @@ export const useFetchProducts = async (host: string, port: number, path: string)
         if (Array.isArray(data)) { 
             dispatch({
                 type: 'FETCHED_PRODUCTS',
-                payload: data
+                payload: { 
+                    data: data
+                }
             });
         }
     }

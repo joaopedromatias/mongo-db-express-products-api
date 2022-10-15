@@ -1,17 +1,28 @@
+import { useState } from "react";
 import styled from "styled-components"
 import { EditIcon } from "../../icons/Edit";
 import { DeleteIcon } from "../../icons/Delete"
+import { Modal } from "../modal/Modal";
 
 export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JSX.Element => { 
+
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<'UPDATE' | 'ADD' | 'DELETE' | null>(null);
 
     const fallbackImage = '';
 
     const handleEdit = () => { 
-        console.log('edit')
+        if (!isModalOpen) { 
+            setIsModalOpen(true);
+            setModalType('UPDATE');
+        }
     }
 
     const handleDelete = () => { 
-        console.log('delete')
+        if (!isModalOpen) { 
+            setIsModalOpen(true);
+            setModalType('DELETE');
+        }
     }
 
     return <Wrapper>
@@ -22,6 +33,7 @@ export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JS
             <EditIcon onclick={handleEdit}/>
             <DeleteIcon onclick={handleDelete}/>
         </div>
+        {isModalOpen ? <Modal type={modalType} setIsModalOpen={setIsModalOpen} productName={name}/> : <></>}
     </Wrapper>
 }
 

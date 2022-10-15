@@ -2,12 +2,24 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
 
     const { type, payload } = action;
 
-    if (type === 'FETCHED_PRODUCTS') {
+    if (type === 'FETCHED_PRODUCTS' && payload.data) {
         return { 
-            products: payload, 
+            products: payload.data, 
             isDataFetched: true,
             isDataOld: false
         }
+    }
+
+    if(type === 'DELETE_PRODUCT' && payload.productId) { 
+
+    }
+
+    if(type === 'UPDATE_PRODUCT' && payload.productId) { 
+        
+    }
+
+    if(type === 'ADD_PRODUCT' && payload.productId) { 
+        
     }
 
     return state
