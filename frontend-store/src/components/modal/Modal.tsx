@@ -1,6 +1,6 @@
-import { ChangeEvent, useContext, useEffect } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { apiHostname, port, productsBaseRoute } from "../../utils/utils";
 import { ReducerContext } from "../ReducerProvider";
 
@@ -11,27 +11,110 @@ interface WrapperProps {
 interface Props { 
     type: 'UPDATE' | 'ADD' | 'DELETE' | null
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-    productName: string
-    productId: number
-    productPrice: number
+    productName?: string
+    productId?: number
+    productPrice?: number
 }
 
 export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productId, productPrice }): JSX.Element => { 
     
     const { dispatch } = useContext(ReducerContext);
 
-    const handleDelete = async (productId: number) => { 
-        const res = await axios.delete(`${apiHostname}:${port}${productsBaseRoute}/${productId}`);
-        const data: APIResponse = res.data;
+    const [imageUrl, setImageUrl] = useState<string | ArrayBuffer | null>(null);
+    const fileInput = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const nameInput = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const priceInput = useRef<HTMLInputElement>({} as HTMLInputElement);
 
-        if (data.sucess) { 
-            dispatch({ type: 'REFRESH_DATA', payload: { 
+    useEffect(() => { 
+        dispatch({type: 'REMOVE_TOAST'});
+    }, []);
+
+    const handleDelete = async (productId: number) => { 
+
+        try { 
+            const res = await axios.delete(`${apiHostname}:${port}${productsBaseRoute}/${productId}`);
+            const data: APIResponse = res.data;
+
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
                 sucess: data.sucess,
                 message: data.message
             } });
+
+        } catch (err) { 
+
+            const errorResponse = (err as AxiosError).response
+            const errorData = errorResponse ? errorResponse.data : null;
+            const errorMessage = (errorData as APIResponse).message;
+
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
+                sucess: false,
+                message: errorMessage
+            } });      
+        }
+        
+        setIsModalOpen(false);
+    }
+
+    const handleEdit = async (productId: number) => { 
+
+        try {
+            const res = await axios.put(`${apiHostname}:${port}${productsBaseRoute}/${productId}`, { 
+                name: nameInput.current.value,
+                price: priceInput.current.value,
+                image_url: imageUrl
+            });
+
+            const data: APIResponse = res.data;
+
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
+                sucess: data.sucess,
+                message: data.message
+            } });
+
+            setIsModalOpen(false);  
+
+        } catch (err) { 
+            
+            const errorResponse = (err as AxiosError).response
+            const errorData = errorResponse ? errorResponse.data : null;
+            const errorMessage = (errorData as APIResponse).message;
+            
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
+                sucess: false,
+                message: errorMessage
+            }})
+        }
+    }
+
+    const handleAdd = async () => { 
+        try {
+            const res = await axios.post(`${apiHostname}:${port}${productsBaseRoute}/`, { 
+                name: nameInput.current.value,
+                price: priceInput.current.value,
+                image_url: imageUrl
+            });
+
+            const data: APIResponse = res.data;
+
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
+                sucess: data.sucess,
+                message: data.message
+            } });
+
+            setIsModalOpen(false);  
+
+        } catch (err) { 
+            
+            const errorResponse = (err as AxiosError).response
+            const errorData = errorResponse ? errorResponse.data : null;
+            const errorMessage = (errorData as APIResponse).message;
+            
+            dispatch({ type: 'EVALUATE_RESPONSE', payload: { 
+                sucess: false,
+                message: errorMessage
+            }})
         }
 
-        setIsModalOpen(false);
     }
 
     const modalCloseClick = ( { target }: MouseEvent ) => { 
@@ -55,10 +138,20 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
 
     const openFileDialog = () => { 
         const input = document.createElement('input')
-        input.type = 'file'
-        input.accept = 'image/*'
+        input.type = 'file';
         input.onchange = (e: Event) => { 
-            // get user image
+            
+            const file = e.path[0].files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+                setImageUrl(reader.result);
+                fileInput.current?.classList.add('file-loaded');
+            }, false);
+
+            if (file) { 
+                reader.readAsDataURL(file);
+            }
         }
         input.click();
     }
@@ -66,28 +159,37 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
     return <Wrapper documentHeight={documentHeight}>
         <div className="dark-bg"></div>
         <div className="modal-base">
-            {type === 'UPDATE' ? 
+            {type === 'UPDATE' && productId? 
             <div className="modal"> 
-                <input type="text" placeholder={productName}/>
+                <input type="text" ref={nameInput} placeholder={productName}/>
                 <br />
-                <input type="number" placeholder={'$ ' + String(productPrice)}/>
+                <input type="number" ref={priceInput} placeholder={'$ ' + String(Number(productPrice).toFixed(2)) } />
                 <br />
-                <div className="fileInput" onClick={openFileDialog}>
+                <div className="file-input" ref={fileInput} onClick={openFileDialog}>
                     Change image
                 </div>
                 <br />
-                <button className="btn save">Save</button>
+                <button className="btn save" onClick={() => handleEdit(productId)}>Save</button>
                 <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
-            : type === 'DELETE' ? 
+            : type === 'DELETE' && productId ? 
             <div className="modal">
                 <div className="modal-text">Are you sure you want to delete the {productName}?</div>
                 <button className="btn delete" onClick={() => handleDelete(productId)}>Delete</button>
                 <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
-            </div>
-            : type === 'ADD' ?
-            <div className="modal"> 
-                {/* ADD MODAL HERE */}
+            </div> 
+            : type === 'ADD' ? 
+            <div className="modal">
+                <input type="text" ref={nameInput} placeholder='Product name...'/>
+                <br />
+                <input type="number" ref={priceInput} placeholder='Product price...'/>
+                <br />
+                <div className="file-input" ref={fileInput} onClick={openFileDialog}>
+                    Change image
+                </div>
+                <br />
+                <button className="btn save" onClick={handleAdd}>Add</button>
+                <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
             : <></>}
         </div>
@@ -160,9 +262,21 @@ const Wrapper = styled.div<WrapperProps>`
             color: white;
             border: 1px solid lightblue;
         }
-        .fileInput { 
+        .file-input { 
             text-decoration: underline;
             cursor: pointer;
+        }
+        .file-loaded { 
+            color: #12a812;
+            &::after { 
+                content: '';
+                margin-left: 5px;
+                width: 30px;
+                height: 30px;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' fill='%230FA812' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72 104 184 48 128' fill='none' stroke='%230FA812' stroke-linecap='round' stroke-linejoin='round' stroke-width='16'%3E%3C/polyline%3E%3C/svg%3E") -30px;
+                display: inline-block;
+                vertical-align: -50%;
+            }
         }
     }
     }

@@ -51,8 +51,10 @@ transition: all linear 2s;
         display: inline-block;
         margin: 15px 0px;
         padding-top: 10px;
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         font-weight: 500;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        letter-spacing: 1px;
     }
 }
 .products-grid { 

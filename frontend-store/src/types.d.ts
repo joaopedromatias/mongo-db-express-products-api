@@ -1,4 +1,9 @@
 declare global { 
+
+    interface Event { 
+        path: Files[]
+    }
+
     interface Product { 
         id: number,
         name: string,

@@ -2,6 +2,7 @@ import express from 'express'
 import productsRouter from './routes/products'
 import cors from 'cors'
 import path from 'path'
+import open from 'open'
 
 const app = express();
 const port = 8080;
@@ -25,3 +26,5 @@ app.all('*', (req: express.Request, res: express.Response) => {
 app.listen(port, () => { 
     console.log(`Server listening on port ${port}...`);
 });
+
+open('http://localhost:8080/');

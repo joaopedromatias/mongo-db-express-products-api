@@ -1,15 +1,15 @@
-import { useState } from "react";
 import styled from "styled-components"
 import { EditIcon } from "../icons/Edit";
 import { DeleteIcon } from "../icons/Delete"
 import { Modal } from "../modal/Modal";
+import { useState } from "react";
 
 export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JSX.Element => { 
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalType, setModalType] = useState<'UPDATE' | 'ADD' | 'DELETE' | null>(null);
 
-    const fallbackImage = '';
+    const fallbackImage = 'https://wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg';
 
     const handleEdit = () => { 
         if (!isModalOpen) { 
@@ -28,7 +28,7 @@ export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JS
     return <Wrapper>
         <div className="name">{name}</div>
         <img className="image" src={image_url || fallbackImage} alt={name} />
-        <span className="price">$ {price}</span>
+        <span className="price">$ {Number(price).toFixed(2)}</span>
         <div className="flex">
             <EditIcon onclick={handleEdit}/>
             <DeleteIcon onclick={handleDelete}/>

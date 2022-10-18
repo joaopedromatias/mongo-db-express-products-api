@@ -8,15 +8,16 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
             return { 
                 ...state,
                 products: payload.data, 
-                isDataFetched: true
+                isDataFetched: true,
+                isDataOld: false
             }
         }
     
-        if (type === 'REFRESH_DATA' && payload.message && payload.sucess) { 
+        if (type === 'EVALUATE_RESPONSE' && payload.message && typeof payload.sucess === 'boolean') { 
         
             return { 
                 ...state,
-                isDataOld: true,
+                isDataOld: payload.sucess,
                 toast: {
                     isToastActive: true,
                     message: payload.message,
@@ -25,7 +26,6 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
             }
 
         }
-
     }
 
     if (type === 'REMOVE_TOAST') { 
@@ -38,8 +38,6 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
             }
         }
     }
-
-    
 
     return state
 }

@@ -6,6 +6,6 @@ export const checkParamsPut = (req: Request, res: Response, next: NextFunction) 
     if( name || price || image_url) { 
         next();
     } else { 
-        res.status(400).send({sucess: false, message: 'you need to provide at least a new property (name, price or image_url)'});
+        res.status(400).send({sucess: false, message: 'you need to provide at least a new property (name, price or image url)'});
     }
 };

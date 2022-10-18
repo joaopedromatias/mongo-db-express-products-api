@@ -12,7 +12,7 @@ export const useFetchProducts = async (host: string, port: number, path: string)
         const rawData: APIResponse = await res.data;
         
         const { data } = rawData;
-    
+
         if (Array.isArray(data)) { 
             dispatch({
                 type: 'FETCHED_PRODUCTS',

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import { ReducerContext } from "../ReducerProvider"
 import { CloseIcon } from "../icons/Close"
@@ -14,6 +14,7 @@ interface Props extends WrapperProps {
 export const Toast: React.FC<Props> = ({ sucess, message }): JSX.Element => { 
 
     const { dispatch } = useContext(ReducerContext);
+    const [progress, setProgress] = useState<number>(0)
 
     useEffect(() => {
         const timeout = setTimeout(() => { 
@@ -24,6 +25,13 @@ export const Toast: React.FC<Props> = ({ sucess, message }): JSX.Element => {
         }
     }, []);
 
+    useEffect(() => { 
+        const interval = setInterval(() => { 
+            setProgress(progress + 10);
+        }, 10)
+        return () => clearInterval(interval)
+    }, [progress])
+
     return <Wrapper sucess={sucess}>
         <div className="toast">
             <div className="toast-message">
@@ -32,7 +40,6 @@ export const Toast: React.FC<Props> = ({ sucess, message }): JSX.Element => {
             </div>
         </div>
     </Wrapper>
-    
 }
 
 const Wrapper = styled.div<WrapperProps>`
@@ -53,6 +60,9 @@ const Wrapper = styled.div<WrapperProps>`
         align-items: center;
         .text { 
             padding-right: 50px;
+            &:first-letter { 
+                text-transform: uppercase;
+            }
         }
     }
 }

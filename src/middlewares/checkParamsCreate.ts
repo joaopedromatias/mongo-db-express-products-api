@@ -4,7 +4,7 @@ export const checkParamsCreate = (req: Request, res: Response, next: NextFunctio
     const { name, price } = req.body;
 
     if (!name || !price) { 
-        res.status(400).json({sucess: false, message: 'You need to provide a name and a price to the new product'});
+        res.status(400).json({sucess: false, message: 'you need to provide a name and a price to the new product'});
     } else { 
         next();
     }
