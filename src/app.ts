@@ -1,11 +1,12 @@
 import express from 'express'
 import productsRouter from './routes/products'
 import cors from 'cors'
+import path from 'path'
 
 const app = express();
 const port = 8080;
 
-app.use(express.static('./frontend/public'));
+app.use(express.static(path.join(process.cwd(), 'frontend-store', 'build')));
 
 app.use(cors({ 
     origin: '*'
