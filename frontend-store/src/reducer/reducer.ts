@@ -2,25 +2,44 @@ export const reducer = (state: StateData, action: ReducerActionFunction): StateD
 
     const { type, payload } = action;
 
-    if (type === 'FETCHED_PRODUCTS' && payload.data) {
+    if (payload) { 
+
+        if (type === 'FETCHED_PRODUCTS' && payload.data) {
+            return { 
+                ...state,
+                products: payload.data, 
+                isDataFetched: true
+            }
+        }
+    
+        if (type === 'REFRESH_DATA' && payload.message && payload.sucess) { 
+        
+            return { 
+                ...state,
+                isDataOld: true,
+                toast: {
+                    isToastActive: true,
+                    message: payload.message,
+                    sucess: payload.sucess
+                }
+            }
+
+        }
+
+    }
+
+    if (type === 'REMOVE_TOAST') { 
         return { 
-            products: payload.data, 
-            isDataFetched: true,
-            isDataOld: false
+            ...state, 
+            toast: { 
+                isToastActive: false,
+                message: '',
+                sucess: null
+            }
         }
     }
 
-    if(type === 'DELETE_PRODUCT' && payload.productId) { 
-
-    }
-
-    if(type === 'UPDATE_PRODUCT' && payload.productId) { 
-        
-    }
-
-    if(type === 'ADD_PRODUCT' && payload.productId) { 
-        
-    }
+    
 
     return state
 }

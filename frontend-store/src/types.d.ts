@@ -15,17 +15,24 @@ declare global {
     interface ReducerActionFuntionPayload { 
         data?: Product[],
         productId?: number
+        message?: string
+        sucess?: boolean 
     }
 
     interface StateData { 
         products: null | Product[]
         isDataFetched: boolean
         isDataOld: boolean
+        toast: { 
+            isToastActive: boolean
+            message: string
+            sucess: boolean | null
+        }
     }
 
     interface ReducerActionFunction { 
         type: string,
-        payload: ReducerActionFuntionPayload 
+        payload?: ReducerActionFuntionPayload 
     }
 }
 

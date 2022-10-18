@@ -4,26 +4,23 @@ import { ReducerContext } from "../ReducerProvider"
 import { ProductCard } from "./ProductCard";
 import styled from "styled-components";
 import { AddProduct } from "./AddProduct";
-
-const apiHostname = 'http://localhost';
-const port = 8080;
-const getProductsRoute = '/api/products';
+import { apiHostname, port, productsBaseRoute } from "../../utils/utils";
+import { Toast } from "../toast/Toast";
 
 export const Store = (): JSX.Element => { 
     
-    const { productData: { products} } = useContext(ReducerContext);
+    const { state, dispatch } = useContext(ReducerContext);
     
+    useFetchProducts(apiHostname, port, productsBaseRoute);
 
-    useFetchProducts(apiHostname, port, getProductsRoute);
-
-    if(products) { 
+    if(state.products) { 
 
         return <StoreWrapper>
             <div className="header">
                 <span className="title">Store Admin Pannel</span>
             </div>
             <div className="products-grid">
-                {products.map(product => { 
+                {state.products.map(product => { 
                     return <ProductCard
                         key={product.id}
                         id={product.id}
@@ -33,6 +30,7 @@ export const Store = (): JSX.Element => {
                 })}
                 <AddProduct />
             </div>
+            {state.toast.isToastActive ? <Toast message={state.toast.message} sucess={state.toast.sucess} /> : <></>}
         </StoreWrapper>
     }
 
@@ -40,6 +38,7 @@ export const Store = (): JSX.Element => {
 }
 
 const StoreWrapper = styled.div`
+transition: all linear 2s;
 .header {
     position: sticky;
     top: 0;

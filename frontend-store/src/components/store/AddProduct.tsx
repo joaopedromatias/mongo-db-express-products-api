@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { PlusIcon } from "../../icons/Plus"
+import { PlusIcon } from "../icons/Plus"
 
 export const AddProduct = () => { 
 

@@ -1,14 +1,15 @@
+import axios from "axios";
 import { useContext } from "react";
 import { ReducerContext } from "../components/ReducerProvider";
 
 export const useFetchProducts = async (host: string, port: number, path: string) => { 
 
-    const { productData, dispatch} = useContext(ReducerContext);
+    const { state, dispatch} = useContext(ReducerContext);
 
-    if (!productData.isDataFetched || productData.isDataOld) { 
+    if (!state.isDataFetched || state.isDataOld) { 
 
-        const res = await fetch(`${host}:${port}${path}`);
-        const rawData: APIResponse = await res.json();
+        const res = await axios.get(`${host}:${port}${path}`);
+        const rawData: APIResponse = await res.data;
         
         const { data } = rawData;
     

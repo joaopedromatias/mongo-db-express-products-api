@@ -4,7 +4,12 @@ import { reducer } from '../reducer/reducer'
 const initialState: StateData = { 
     products: null,
     isDataFetched: false,
-    isDataOld: false
+    isDataOld: false,
+    toast: { 
+        isToastActive: false,
+        message: '',
+        sucess: null
+    }
 }
 
 interface Props { 
@@ -12,7 +17,7 @@ interface Props {
 }
 
 interface Context { 
-    productData: StateData
+    state: StateData
     dispatch: React.Dispatch<ReducerActionFunction>
 }
 
@@ -20,9 +25,9 @@ export const ReducerContext = createContext<Context>({} as Context);
 
 export const ReducerProvider: FC<Props> = ({ children }): JSX.Element => { 
 
-    const [productData, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
     
-    return <ReducerContext.Provider value={ {productData, dispatch}}>
+    return <ReducerContext.Provider value={ {state, dispatch}}>
         {children}
     </ReducerContext.Provider>
 }

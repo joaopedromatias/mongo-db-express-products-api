@@ -1,5 +1,8 @@
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import styled from "styled-components"
+import axios from "axios";
+import { apiHostname, port, productsBaseRoute } from "../../utils/utils";
+import { ReducerContext } from "../ReducerProvider";
 
 interface WrapperProps { 
     documentHeight: number
@@ -14,8 +17,20 @@ interface Props {
 
 export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productId }): JSX.Element => { 
     
-    const handleDelete = (productId: number) => { 
-        
+    const { dispatch } = useContext(ReducerContext);
+
+    const handleDelete = async (productId: number) => { 
+        const res = await axios.delete(`${apiHostname}:${port}${productsBaseRoute}/${productId}`);
+        const data: APIResponse = res.data;
+
+        if (data.sucess) { 
+            dispatch({ type: 'REFRESH_DATA', payload: { 
+                sucess: data.sucess,
+                message: data.message
+            } });
+        }
+
+        setIsModalOpen(false);
     }
 
     const modalCloseClick = ( { target }: MouseEvent ) => { 
@@ -75,13 +90,13 @@ const Wrapper = styled.div<WrapperProps>`
         top: 0;
         left: 0;
         .modal { 
-        margin: 0 calc(50vw - 225px);
-        opacity: 1;
-        position: fixed;
-        top: 40%;
-        background-color: #ececec;
-        padding: 25px 15px;
-        border-radius: 10px;
+            margin: 0 calc(50vw - 225px);
+            opacity: 1;
+            position: fixed;
+            top: 40%;
+            background-color: #ececec;
+            padding: 25px 15px;
+            border-radius: 10px;
         .modal-text { 
             font-size: 1.3rem;
         }

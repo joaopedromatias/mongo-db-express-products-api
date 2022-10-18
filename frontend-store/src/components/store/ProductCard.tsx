@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components"
-import { EditIcon } from "../../icons/Edit";
-import { DeleteIcon } from "../../icons/Delete"
+import { EditIcon } from "../icons/Edit";
+import { DeleteIcon } from "../icons/Delete"
 import { Modal } from "../modal/Modal";
 
 export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JSX.Element => { 
