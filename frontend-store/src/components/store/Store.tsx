@@ -9,7 +9,7 @@ import { Toast } from "../toast/Toast";
 
 export const Store = (): JSX.Element => { 
     
-    const { state, dispatch } = useContext(ReducerContext);
+    const { state } = useContext(ReducerContext);
     
     useFetchProducts(apiHostname, port, productsBaseRoute);
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { ChangeEvent, useContext, useEffect } from "react"
 import styled from "styled-components"
 import axios from "axios";
 import { apiHostname, port, productsBaseRoute } from "../../utils/utils";
@@ -13,9 +13,10 @@ interface Props {
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     productName: string
     productId: number
+    productPrice: number
 }
 
-export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productId }): JSX.Element => { 
+export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productId, productPrice }): JSX.Element => { 
     
     const { dispatch } = useContext(ReducerContext);
 
@@ -51,13 +52,32 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
         window.document.documentElement.clientHeight, 
         window.document.documentElement.scrollHeight, 
         window.document.documentElement.offsetHeight );   
+
+    const openFileDialog = () => { 
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = 'image/*'
+        input.onchange = (e: Event) => { 
+            // get user image
+        }
+        input.click();
+    }
     
     return <Wrapper documentHeight={documentHeight}>
         <div className="dark-bg"></div>
         <div className="modal-base">
             {type === 'UPDATE' ? 
             <div className="modal"> 
-                {/* UPDATE MODAL HERE */}
+                <input type="text" placeholder={productName}/>
+                <br />
+                <input type="number" placeholder={'$ ' + String(productPrice)}/>
+                <br />
+                <div className="fileInput" onClick={openFileDialog}>
+                    Change image
+                </div>
+                <br />
+                <button className="btn save">Save</button>
+                <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
             : type === 'DELETE' ? 
             <div className="modal">
@@ -89,25 +109,41 @@ const Wrapper = styled.div<WrapperProps>`
         position: absolute;
         top: 0;
         left: 0;
-        .modal { 
-            margin: 0 calc(50vw - 225px);
+        .modal {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            left: 50%;
+            transform: translateX(-50%);
             opacity: 1;
             position: fixed;
             top: 40%;
             background-color: #ececec;
             padding: 25px 15px;
             border-radius: 10px;
+            letter-spacing: 0.5px;
+            input { 
+                padding: 10px 5px;
+                border: none;
+                border-radius: 7px;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+                ::placeholder { 
+                    font-style: italic;    
+                }
+                :focus { 
+                    border: darkgray 1px solid;
+                    outline: none
+                }
+            }
         .modal-text { 
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
         .btn { 
             padding: 10px 15px;
             margin: 15px 10px;
             margin-bottom: 5px;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             letter-spacing: 1.2px;
         }
         .delete { 
@@ -118,7 +154,15 @@ const Wrapper = styled.div<WrapperProps>`
         .cancel { 
             border: 0.5px solid #333533;
             background-color: #ececec;
-            
+        }
+        .save { 
+            background-color: #2669c1;
+            color: white;
+            border: 1px solid lightblue;
+        }
+        .fileInput { 
+            text-decoration: underline;
+            cursor: pointer;
         }
     }
     }
