@@ -10,9 +10,9 @@ There are other two **`custom middlewares`** in order to validate if the request
 
 In order to run it locally: 
 
-`npm install 💻`
+### `npm install 💻`
 
-`npm start ✨`
+### `npm start ✨`
 
 ## `API Reference 📑` 
 
