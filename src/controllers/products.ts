@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { readFileSync } from 'fs';
-import { Product } from "../../types";
+import { Product } from "../utils/types";
 
 const initialData: string = readFileSync(process.cwd() + '/resource/products.json','utf8');
 let programData: Array<Product> = JSON.parse(initialData);
