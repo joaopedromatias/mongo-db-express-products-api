@@ -5,7 +5,7 @@ declare global {
     }
 
     interface Product { 
-        id: number,
+        sku: number,
         name: string,
         price: number,
         image_url?: string

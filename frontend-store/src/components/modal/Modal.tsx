@@ -12,11 +12,11 @@ interface Props {
     type: 'UPDATE' | 'ADD' | 'DELETE' | null
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
     productName?: string
-    productId?: number
+    productSku?: number
     productPrice?: number
 }
 
-export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productId, productPrice }): JSX.Element => { 
+export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, productSku, productPrice }): JSX.Element => { 
     
     const { dispatch } = useContext(ReducerContext);
 
@@ -24,6 +24,7 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
     const fileInput = useRef<HTMLInputElement>({} as HTMLInputElement);
     const nameInput = useRef<HTMLInputElement>({} as HTMLInputElement);
     const priceInput = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const skuInput = useRef<HTMLInputElement>({} as HTMLInputElement);
 
     useEffect(() => { 
         dispatch({type: 'REMOVE_TOAST'});
@@ -58,7 +59,7 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
     const handleEdit = async (productId: number) => { 
 
         try {
-            const res = await axios.put(`${apiHostname}:${port}${productsBaseRoute}/${productId}`, { 
+            const res = await axios.patch(`${apiHostname}:${port}${productsBaseRoute}/${productId}`, { 
                 name: nameInput.current.value,
                 price: priceInput.current.value,
                 image_url: imageUrl
@@ -91,7 +92,8 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
             const res = await axios.post(`${apiHostname}:${port}${productsBaseRoute}/`, { 
                 name: nameInput.current.value,
                 price: priceInput.current.value,
-                image_url: imageUrl
+                image_url: imageUrl,
+                sku: skuInput.current.value
             });
 
             const data: APIResponse = res.data;
@@ -159,7 +161,7 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
     return <Wrapper documentHeight={documentHeight}>
         <div className="dark-bg"></div>
         <div className="modal-base">
-            {type === 'UPDATE' && productId? 
+            {type === 'UPDATE' && productSku? 
             <div className="modal"> 
                 <input type="text" ref={nameInput} placeholder={productName}/>
                 <br />
@@ -169,13 +171,13 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
                     Change image
                 </div>
                 <br />
-                <button className="btn save" onClick={() => handleEdit(productId)}>Save</button>
+                <button className="btn save" onClick={() => handleEdit(productSku)}>Save</button>
                 <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
-            : type === 'DELETE' && productId ? 
+            : type === 'DELETE' && productSku ? 
             <div className="modal">
                 <div className="modal-text">Are you sure you want to delete the {productName}?</div>
-                <button className="btn delete" onClick={() => handleDelete(productId)}>Delete</button>
+                <button className="btn delete" onClick={() => handleDelete(productSku)}>Delete</button>
                 <button className="btn cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div> 
             : type === 'ADD' ? 
@@ -183,6 +185,8 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
                 <input type="text" ref={nameInput} placeholder='Product name...'/>
                 <br />
                 <input type="number" ref={priceInput} placeholder='Product price...'/>
+                <br />
+                <input type="number" ref={skuInput} placeholder='Product SKU...'/>
                 <br />
                 <div className="file-input" ref={fileInput} onClick={openFileDialog}>
                     Change image

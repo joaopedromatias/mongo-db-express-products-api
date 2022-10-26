@@ -4,7 +4,7 @@ import { DeleteIcon } from "../icons/Delete"
 import { Modal } from "../modal/Modal";
 import { useState } from "react";
 
-export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JSX.Element => { 
+export const ProductCard: React.FC<Product> = ({name, sku, image_url, price}): JSX.Element => { 
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalType, setModalType] = useState<'UPDATE' | 'ADD' | 'DELETE' | null>(null);
@@ -33,7 +33,7 @@ export const ProductCard: React.FC<Product> = ({name, id, image_url, price}): JS
             <EditIcon onclick={handleEdit}/>
             <DeleteIcon onclick={handleDelete}/>
         </div>
-        {isModalOpen ? <Modal type={modalType} setIsModalOpen={setIsModalOpen} productName={name} productPrice={price} productId={id}/> : <></>}
+        {isModalOpen ? <Modal type={modalType} setIsModalOpen={setIsModalOpen} productName={name} productPrice={price} productSku={sku}/> : <></>}
     </Wrapper>
 }
 

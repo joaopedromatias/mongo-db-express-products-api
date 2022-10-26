@@ -3,7 +3,7 @@ import { PlusIcon } from "../icons/Plus"
 import { useState } from "react";
 import { Modal } from "../modal/Modal";
 
-export const AddProduct: React.FC = ({ }) => { 
+export const AddProduct: React.FC = () => { 
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalType, setModalType] = useState<'UPDATE' | 'ADD' | 'DELETE' | null>(null);

@@ -22,8 +22,8 @@ export const Store = (): JSX.Element => {
             <div className="products-grid">
                 {state.products.map(product => { 
                     return <ProductCard
-                        key={product.id}
-                        id={product.id}
+                        key={product.sku}
+                        sku={product.sku}
                         name={product.name}
                         price={product.price}
                         image_url={product.image_url} />
