@@ -20,7 +20,7 @@ npm start ✨
 
 <hr>
 
-- **GET** `/api/products/sku` returns a specific products of the store. The id must always be a numeric value.
+- **GET** `/api/products/sku` returns a specific products of the store. The sku must always be a numeric value with 5 characters.
 
 <hr>
 
