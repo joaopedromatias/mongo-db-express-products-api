@@ -1,12 +1,13 @@
-class Test {
-    othername: string
+export class APIError extends Error {
+    statusCode: number
     
-    constructor(othername) { 
-        this.othername = othername
+    constructor(message: string, statusCode: number) { 
+        super(message)
+        this.statusCode = statusCode
     }
 
 }
 
-// function generator
-const newTest = new Test('oie');
-console.log(newTest.othername);
+export const createErrorObject = (message: string, statusCode: number) => { 
+    return new APIError(message, statusCode);
+} 

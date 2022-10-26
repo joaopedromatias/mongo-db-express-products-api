@@ -4,8 +4,10 @@ import cors from 'cors'
 import path from 'path'
 import open from 'open'
 import dotenv from 'dotenv'
+import { connectDb } from './db/connect'
 import { errorHandler } from './middlewares/errorHandler'
 import { notFound } from './middlewares/notFound'
+
 dotenv.config();
 
 const app = express();
@@ -26,10 +28,19 @@ app.use('/api/products', productsRouter);
 app.use(errorHandler);
 
 app.use(notFound);
-// database connection here
 
-app.listen(port, () => { 
-    console.log(`Server listening on port ${port}...`);
-});
+const startServer = async () => { 
+    try { 
+        await connectDb(process.env.MONGO_URI as string)
+        app.listen(port, () => { 
+            console.log(`Server listening on port ${port}... 🔈`);
+        });
+    } catch (err) { 
+        console.log(err)
+        console.log(`Could not establish connection to the database`);
+    }
+}
+
+startServer();
 
 //open('http://localhost:8080/');

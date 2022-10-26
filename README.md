@@ -1,14 +1,10 @@
-# `Express Server Products CRUD Operations 🔧`
+# `MongoDB & Express Products API ☁️`
 
-This project features a server made using `Express` and a user interface made using `React`.
+This project is like the project of my repository `express-server-products-api-crud-operations`, but it adds more complexity by inserting a `MongoDB database` and other `middlewares`.
 
-The server works as a `web server` and as an `API` that allows the user to **_view_**, **_add_**, **_edit_** and **_delete_** products in a store admin pannel. 🛅
+This application is made using `Express` for the server, a user interface made using `React` and a database running on `MongoDB Atlas`.
 
-In the routes that require an id to be passed, the product router uses a **`custom middleware`** to check if the value provided as the id is valid. If it is, it passes the execution to the next handler ✔️ otherwise it sends the error response
-
-There are other two **`custom middlewares`** in order to validate if the request body meets the expectations (on POST and UPDATE routes).
-
-In order to run it locally: 
+In order to run it locally, you will first need to create a database on MongoDB Atlas and insert your connection string on the `.env` file
 
 ```
 npm install 💻
@@ -47,5 +43,3 @@ npm start ✨
 <hr>
 
 - **DELETE** `/api/products/id` Deletes a product from the store.
-
-PS: The project is not connected to a database, so when the server re-starts all the data come back to the initial stage, which relies on the `resource/products.json`.

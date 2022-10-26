@@ -1,92 +1,45 @@
-import { Request, Response } from "express";
-import { readFileSync } from 'fs';
-import { Product } from "../utils/types";
+import { NextFunction, Request, Response } from "express";
+import { asyncWrapper } from "../middlewares/asyncWrapper";
+import ProductModel from '../models/products'
 
-const initialData: string = readFileSync(process.cwd() + '/resource/products.json','utf8');
-let programData: Array<Product> = JSON.parse(initialData);
+export const getProducts = asyncWrapper(async (req: Request, res: Response) => { 
+    const products = await ProductModel.find();
+    return res.status(200).json({sucess: true, data: products});
+});
 
-export const getProducts = (req: Request, res: Response) => { 
-    try { 
-        res.status(200).json({sucess: true, data: programData});
-    } catch (err) { 
-        res.status(500).send({sucess: false, message: 'server error, please reach out the support'});
+export const getProduct = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => { 
+    const { sku } = req.params;
+    const product = await ProductModel.findOne({ sku });
+    if (product) { 
+        return res.status(200).json({sucess: true, data: product});
+    } else { 
+        next();
     }
-};
+});
 
-export const getProduct = (req: Request, res: Response) => { 
-    const { id } = req.params;
+export const createProduct = asyncWrapper( async (req: Request, res: Response) => { 
+    await ProductModel.create(req.body);
+    res.status(201).json({sucess: true, message: 'product sucessfully created'});
+});
 
-    try { 
-       const product: Array<Product> = programData.filter(product => product.id === Number(id));
-
-        if (product.length === 1) { 
-            res.status(200).json({sucess: true, data: product[0]});
-        } else if (product.length === 0) { 
-            res.status(404).send({sucess: false, message: 'no product matching the provided id'});
-        } else {
-            res.status(500).send({sucess: false, message: 'server error, please reach out the support'});
-        }
-    } catch (err) { 
-        res.status(500).send({sucess: false, message: 'server error, please reach out the support'});
+export const updateProduct = asyncWrapper( async (req: Request, res: Response, next: NextFunction) => { 
+    const { sku } = req.params;
+    const newProduct = await ProductModel.findOneAndUpdate({ sku }, req.body, { 
+        new: true,
+        runValidators: true, 
+        useFindAndModify: false
+    })
+    if (newProduct) { 
+        res.status(200).json({ sucess: true, message: 'product sucessfully updated'})
+    } else { 
+        next();
     }
-};
+});
 
-export const createProduct = (req: Request, res: Response) => { 
-    const { name, price, image_url } = req.body
-    try { 
-        programData.push({ 
-            id: programData.length + 1,
-            name,
-            price,
-            image_url
-        });
-        res.status(201).send({sucess: true, message: 'product sucessfully registered'});
-    } catch (err) { 
-        res.status(500).send({sucess: false, message: 'server error, please reach out the support'});
-    }
-};
-
-export const updateProduct = (req: Request, res: Response) => { 
-    const { id } = req.params;
-    const { name, price, image_url } = req.body;
-
-    try { 
-        let product: Product | undefined = programData.find(product => product.id === Number(id));
-
-        if (product) { 
-
-            product.name = name || product.name;
-            product.price = price || product.price;
-            product.image_url = image_url || product.image_url;
-
-            programData[Number(id)-1] = product;
-
-            res.status(200).json({sucess: true, message: 'product sucessfully updated'});
-        } else { 
-            res.status(404).send({sucess: false, message: 'no product matching the provided id'})
-        }
-    
-    } catch (err) { 
-        res.status(500).send({sucess: false, message: 'server error, please reach out the support'})
-    }    
-};
-
-export const deleteProduct = (req: Request, res: Response) => { 
-    const { id } = req.params;
-
-    try { 
-        let filteredProgramData = programData.filter(product => product.id !== Number(id));
-
-        if (programData.length - filteredProgramData.length === 1) {
-            programData = filteredProgramData.map((product,index) => { 
-                return { ...product, id: index + 1 };
-            }) 
-            res.status(200).json({sucess: true, message: 'product sucessfully deleted'});
-        } else { 
-            res.status(404).send({sucess: false, message: 'no product matching the provided id'});
-        }
-        
-    } catch (err) { 
-        res.status(500).send({sucess: false, message: 'server error, please reach out the support'});
-    }
+export const deleteProduct = async (req: Request, res: Response) => { 
+    const { sku } = req.params;
+    await ProductModel.findOneAndDelete({ sku }, { 
+        useFindAndModify: false
+    });
+    res.status(200).json({ sucess: true, message: 'product sucessfully deleted'})
 };
