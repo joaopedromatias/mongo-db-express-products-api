@@ -75,7 +75,7 @@ export const Modal: React.FC<Props> = ( { type, setIsModalOpen, productName, pro
             setIsModalOpen(false);  
 
         } catch (err) { 
-            
+            console.log(err);
             const errorResponse = (err as AxiosError).response
             const errorData = errorResponse ? errorResponse.data : null;
             const errorMessage = (errorData as APIResponse).message;
