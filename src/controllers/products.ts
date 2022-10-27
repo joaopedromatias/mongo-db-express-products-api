@@ -18,23 +18,30 @@ export const getProduct = asyncWrapper(async (req: Request, res: Response, next:
     }
 });
 
-export const createProduct = asyncWrapper(async (req: Request, res: Response) => { 
-    await ProductModel.create(req.body);
-    res.status(201).json({sucess: true, message: 'product sucessfully created'});
-    // VALIDACAO SE JA NAO EXISTE ESSE PRODUCT ID
+export const createProduct = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => { 
+
+    const productSkuAlreadyExists = !!(await ProductModel.exists({sku: req.body.sku}));
+    
+    if (!productSkuAlreadyExists) { 
+        await ProductModel.create(req.body);
+        res.status(201).json({sucess: true, message: 'product sucessfully created'});
+    } else { 
+        const error = createErrorObject('This product SKU already exists', 400);
+        next(error);
+    }
 });
 
 export const updateProduct = asyncWrapper( async (req: Request, res: Response, next: NextFunction) => { 
     const { sku } = req.params;
-    const bodyWithoutEmpty = {...req.body};
+    const bodyWithoutEmptyProperties = {...req.body};
 
-    Object.keys(bodyWithoutEmpty).forEach(property => { 
-        if (!bodyWithoutEmpty[property]) { 
-            delete bodyWithoutEmpty[property]
+    Object.keys(bodyWithoutEmptyProperties).forEach(property => { 
+        if (!bodyWithoutEmptyProperties[property] || property === 'sku') { 
+            delete bodyWithoutEmptyProperties[property]
         }
     });
 
-    const isEmpty = Object.keys(bodyWithoutEmpty).length === 0;
+    const isEmpty = Object.keys(bodyWithoutEmptyProperties).length === 0;
 
     if (isEmpty) { 
         const customError = createErrorObject('You must provide at least a new name, price or image', 400);
@@ -42,7 +49,7 @@ export const updateProduct = asyncWrapper( async (req: Request, res: Response, n
         return null
     }
 
-    const newProduct = await ProductModel.findOneAndUpdate({ sku }, bodyWithoutEmpty, { 
+    const newProduct = await ProductModel.findOneAndUpdate({ sku }, bodyWithoutEmptyProperties, { 
         new: true,
         runValidators: true, 
         useFindAndModify: false
@@ -51,7 +58,7 @@ export const updateProduct = asyncWrapper( async (req: Request, res: Response, n
     if (newProduct) { 
         res.status(200).json({ sucess: true, message: 'product sucessfully updated'})
     } else { 
-        next(); // VER SE ESTÁ FUNCIONANDO QUANDO PASSA UM ID QUE NÃO EXISTE
+        next(); 
     }
 });
 
@@ -63,7 +70,7 @@ export const deleteProduct = async (req: Request, res: Response, next: NextFunct
     if (productDeleted) { 
         res.status(200).json({ sucess: true, message: 'product sucessfully deleted'})
     } else { 
-        next() // VER SE ESTÁ FUNCIONANDO QUANDO PASSA UM ID QUE NÃO EXISTE
+        next() 
     }
     
 };
