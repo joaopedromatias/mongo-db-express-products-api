@@ -1,7 +1,7 @@
 {
   "name": "express-server-products-crud-operations",
   "version": "1.0.0",
-  "description": "Project designed to manage data from UI by communicating to server, using React and Express",
+  "description": "Project designed to manage data from UI by communicating to server and database, using React, Express and MongoDB",
   "main": "app.ts",
   "scripts": {
     "start": "nodemon ./src/app.ts",
