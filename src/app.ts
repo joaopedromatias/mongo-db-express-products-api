@@ -43,4 +43,4 @@ const startServer = async () => {
 
 startServer();
 
-//open('http://localhost:8080/');
+open('http://localhost:8080/');
