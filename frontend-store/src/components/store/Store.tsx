@@ -34,7 +34,7 @@ export const Store = (): JSX.Element => {
         </StoreWrapper>
     }
 
-    return <h3>Error</h3>
+    return <h3>Loading</h3>
 }
 
 const StoreWrapper = styled.div`
